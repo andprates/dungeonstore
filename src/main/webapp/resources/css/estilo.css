@@ -1,0 +1,59 @@
+body, td, th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+body{
+	background-image: url("#{facesContext.externalContext.requestContextPath}/resources/images/fundo_site3.jpg");
+}
+
+img {
+	border: 0px;
+}
+
+#container {
+	width: 1600px;
+	height: 100%;
+	margin: 0 auto
+}
+
+#barra_menu {
+	padding: 3px;
+}
+
+#corpo {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	min-height: 600px;
+}
+
+#rodape {
+	height: 20px;
+	margin-top: 5px;
+	padding: 10px;
+	text-align: center;
+	background: #fdfeff;
+	border-style: solid;
+	border-color: #c1ddff;
+	border-width: thin;
+}
+
+.semBorda tr, .semBorda td {  
+    border: none !important;  
+} 
+.info {
+	font-weight: bold;
+	color: green;
+}
+
+.warn {
+	font-weight: bold;
+	color: #FFCC00;
+}
+
+.fatal, .error {
+	font-weight: bold;
+	color: red;
+}
+
+.painel{background: none !important;}

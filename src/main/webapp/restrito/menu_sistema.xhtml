@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition>
+	<h:form>
+		<p:growl id="messages" />
+
+		<p:menubar id="barra">
+			<p:menuitem value="Início" url="/restrito/principal.jsf"/>
+
+			<p:submenu label="Produtos" icon="ui-icon-document">
+				<p:menuitem value="Consultar Produto" url="#" />
+				<p:menuitem value="Cadastrar Produto" action="#{produtoBean.novo()}" />
+				<p:menuitem value="Estoque" url="#" />
+			</p:submenu>
+
+			<p:submenu label="Administrativo" icon="ui-icon-document">
+				<p:submenu label="Financeiro">
+					<p:menuitem value="Rendimentos" url="#" />
+					<p:menuitem value="Cotações de Moedas" url="#" />
+				</p:submenu>
+				<p:submenu label="Fornecedores">
+					<p:menuitem value="Cadastrar Fornecedor" url="#" />
+					<p:menuitem value="Consultar Fornecedor" url="#" />
+				</p:submenu>
+				<p:submenu label="Cálculos">
+					<p:menuitem value="Cálculo de Lote" url="#" />
+					<p:menuitem value="Divisão de Valores no Lote" url="#" />
+				</p:submenu>
+			</p:submenu>
+
+			<f:facet name="options">
+				<p:commandButton value="Novo Usuário" action="#{usuarioBean.novo}"/>
+				<p:spacer height="10" />
+				<p:commandButton value="Logout" icon="ui-icon-extlink"
+				oncomplete="jQuery.get('{request.contextPath}/j_spring_security_logout')"
+				action="/publico/login.jsf" />
+			</f:facet>
+		</p:menubar>
+		<!-- Barra de espera -->
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage library="images"  name="ajaxloadingbar.gif" />
+		</p:dialog>
+	</h:form>
+</ui:composition>
+
+</html>

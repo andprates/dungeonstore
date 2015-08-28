@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/template_interno.xhtml">
+	<ui:define name="corpo">
+		<h1>Cadastro de Produtos</h1>
+		
+		<script type="text/javascript">
+			function somar(valor){
+				alert(valor)
+				alert("passou")
+				}
+		</script>
+
+		<h:form id="form_cadastroProduto">
+			<p:growl id="messages" autoUpdate="true" />
+			<p:focus />
+
+			<p:panel header="Dados Produto" style="width:50%;">
+				<p:panelGrid columns="4" styleClass="semBorda">
+					<h:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" label="Nome"
+						value="#{produtoBean.produto.nome}" required="true"
+						requiredMessage="Informe o nome do produto." maxlength="50" />
+
+					<h:outputLabel for="marca" value="Marca" />
+					<p:inputText id="marca" label="Marca"
+						value="#{produtoBean.produto.marca}" required="true"
+						requiredMessage="Informe a marca." maxlength="50" />
+
+					<h:outputLabel for="categoria" value="Categoria" />
+					<p:inputText id="categoria" label="Categoria"
+						value="#{produtoBean.produto.categoria}" required="true"
+						requiredMessage="Informe a categoria." maxlength="50" />
+
+					<h:outputLabel for="linha" value="Linha" />
+					<p:inputText id="linha" label="Linha"
+						value="#{produtoBean.produto.linha}" maxlength="50" />
+
+					<h:outputLabel for="franquia" value="Franquia" />
+					<p:inputText id="franquia" label="Franquia"
+						value="#{produtoBean.produto.franquia}" required="true"
+						requiredMessage="Informe a franquia." maxlength="50" />
+
+					<h:outputLabel for="origem" value="Origem" />
+					<p:inputText id="origem" label="Origem"
+						value="${produtoBean.produto.origem}" maxlength="50" />
+				</p:panelGrid>
+			</p:panel>
+			<br />
+
+			<p:panel header="Dados Compra" style="width:50%;">
+				<p:panelGrid columns="4" styleClass="semBorda">
+
+					<h:outputLabel for="dataCompra" value="Data de Compra" />
+					<p:calendar id="dataCompra"
+						value="#{produtoBean.cronograma.dataCompra}" pattern="dd/MM/yyyy"
+						maxdate="#{produtoBean.dataAtual}" mask="true" />
+
+					<h:outputLabel for="valorCompra" value="Valor de Compra R$" />
+					<p:inputText id="valorCompra" label="Valor de Compra"
+						value="${produtoBean.cronograma.valorCompra}" maxlength="12">
+						<f:convertNumber pattern="#,##0.00" />
+						<p:ajax update="valorCompra" process="valorCompra" event="change" />
+					</p:inputText>
+
+					<h:outputLabel for="valorPagSeguro" value="Valor no Pagseguro R$" />
+					<p:inputText id="valorPagSeguro" label="Valor no Pagseguro"
+						value="${produtoBean.cronograma.valorPagseguro}" maxlength="12">
+						<f:convertNumber pattern="#,##0.00" />
+						<p:ajax update="valorPagSeguro" />
+						<p:ajax event="blur" update="estimativaVenda"
+							listener="#{produtoBean.calcularEstimativaVenda()}" />
+					</p:inputText>
+
+					<h:outputLabel for="estimativaVenda" value="Estimativa de Venda R$" />
+					<p:inputText id="estimativaVenda" label="Estimativa de Venda"
+						value="${produtoBean.estimativaVenda}" readonly="true">
+						<f:convertNumber pattern="#,##0.00" />
+					</p:inputText>
+
+					<h:outputLabel for="qtde" value="Quantidade" />
+					<p:spinner id="qtde" value="#{produtoBean.cronograma.qtde}"
+						min="0" max="99999" maxlength="5" size="5" required="true"
+						requiredMessage="Informe a quantidade."
+						disabled="#{produtoBean.mostrarRoupa}" />
+
+					<h:outputLabel for="numeroNF" value="Número da NF" />
+					<p:inputText id="numeroNF" label="Número da NF"
+						value="${produtoBean.cronograma.numeroNotaFiscal}"
+						converterMessage="Campo Nota fiscal é numérico." maxlength="30">
+						<f:convertNumber integerOnly="true" />
+					</p:inputText>
+
+				</p:panelGrid>
+				<br />
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<p:selectBooleanCheckbox value="#{produtoBean.mostrarRoupa}"
+						label="Roupa">
+						<p:ajax update="panelRoupa qtde" />
+					</p:selectBooleanCheckbox>
+					<h:outputLabel value="Roupa" />
+				</p:panelGrid>
+			</p:panel>
+			<br />
+
+
+			<p:panel id="panelRoupa" header="Roupa" style="width:50%;"
+				visible="#{produtoBean.mostrarRoupa}">
+				<p:panelGrid columns="6" styleClass="semBorda">
+
+					<h:outputLabel for="tipoRoupa" value="Tipo:" />
+					<p:selectOneMenu id="tipoRoupa"
+						value="#{produtoBean.produto.tipoRoupa}"  maxlength="20"
+						style="width:150px;">
+						<f:selectItem itemLabel=":: Selecione ::" itemValue="#{null}" />
+						<f:selectItems value="#{produtoBean.tipoRoupas}" var="tipo"
+							itemLabel="#{tipo}" itemValue="#{tipo}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel for="cor" value="Cor" />
+					<p:inputText id="cor" label="Cor"
+						value="#{produtoBean.produto.cor}" maxlength="30" size="20" />
+
+					<h:outputLabel value=" " />
+					<h:outputLabel value=" " />
+
+					<h:outputLabel for="qtdep" value="Qtde P" />
+					<p:spinner id="qtdep"
+						value="#{produtoBean.cronograma.qtdeTamanhoP}" min="0" max="10000"
+						maxlength="5" size="5">
+					</p:spinner>
+
+					<h:outputLabel for="qtdem" value="Qtde M" />
+					<p:spinner id="qtdem"
+						value="#{produtoBean.cronograma.qtdeTamanhoM}" min="0" max="10000"
+						maxlength="5" size="5">
+					</p:spinner>
+
+					<h:outputLabel for="qtdeg" value="Qtde G" />
+					<p:spinner id="qtdeg"
+						value="#{produtoBean.cronograma.qtdeTamanhoG}" min="0" max="10000"
+						maxlength="5" size="5">
+					</p:spinner>
+
+				</p:panelGrid>
+
+			</p:panel>
+			<br />
+			
+			<p:commandButton value="Salvar" action="#{produtoBean.salvar()}" update="@form" />
+
+		</h:form>
+		
+		<!-- Barra de espera -->
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage library="images" name="ajaxloadingbar.gif" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>
