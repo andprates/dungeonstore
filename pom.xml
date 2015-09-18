@@ -8,6 +8,16 @@
 	<name>dungeonstore</name>
 
 	<repositories>
+		<repository>
+			<id>eap</id>
+			<url>http://maven.repository.redhat.com/techpreview/all</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 		<!-- PRIMEFACES -->
 		<repository>
 			<id>prime-repo</id>
@@ -15,7 +25,27 @@
 			<url>http://repository.primefaces.org</url>
 			<layout>default</layout>
 		</repository>
+		
+		<!-- SPRINSECURITY NO JSF -->
+		<repository>
+			<id>org.springframework.security.taglibs.facelets</id>
+			<name>Spring Security Facelets Tablib</name>
+			<url>http://spring-security-facelets-taglib.googlecode.com/svn/repo/</url>
+		</repository> 
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>eap</id>
+			<url>http://maven.repository.redhat.com/techpreview/all</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,6 +60,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.2-1003-jdbc4</version>
+		</dependency>
 		<!-- MYSQL -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -75,6 +110,13 @@
 			<artifactId>start</artifactId>
 			<version>1.0.10</version>
 		</dependency>
+		
+		<!-- SPRING ORM -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 
 		<!-- SPRING SECURITY CORE -->
 		<dependency>
@@ -96,6 +138,22 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		
+		<!-- SPRING JDBC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		
+		<!-- TAGS SPRINSECURITY NO JSF -->
+		<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>facelets-taglib-jsf20-spring-3</artifactId>
+		<version>0.5</version>
+ 		</dependency>
+		
 
 		<!-- HIBERNATE -->
 		<dependency>
@@ -116,6 +174,14 @@
 
 	<profiles>
 		<profile>
+			<!-- When built in OpenShift the 'openshift' profile will be used when 
+				invoking mvn. -->
+			<!-- Use this profile for any OpenShift specific customization your app 
+				will need. -->
+			<!-- By default that is to put the resulting archive into the 'webapps' 
+				folder. -->
+			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+			<id>openshift</id>
 			<build>
 				<finalName>dungeonstore</finalName>
 				<plugins>

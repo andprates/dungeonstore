@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="/templates/template_interno.xhtml">
+	<ui:define name="corpo">
+		<h1>Cadastro de Usuário</h1>
+
+		<h:form id="cadastroUsuario">
+			<p:growl id="messages" autoUpdate="true" />
+			<h:inputHidden value="#{usuarioBean.usuario.id}" />
+			<p:panel header="Cadastro de Usuário" style="width:30%;">
+				<p:panelGrid columns="2" styleClass="semBorda">
+					<h:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" label="Nome"
+						value="#{usuarioBean.usuario.nome}" size="40" maxlength="50"
+						required="true" requiredMessage="Informe o nome">
+						<f:validateLength minimum="10" maximum="40" />
+					</p:inputText>
+
+					<h:outputLabel for="email" value="Email" />
+					<p:inputText id="email" label="Email"
+						value="#{usuarioBean.usuario.email}" size="40" maxlength="50"
+						required="true" requiredMessage="Informe email."
+						validatorMessage="Informe email válido.">
+						<f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+" />
+					</p:inputText>
+
+					<h:outputLabel for="login" value="Login" />
+					<p:inputText id="login" label="Login"
+						value="#{usuarioBean.usuario.login}" size="20" maxlength="20"
+						required="true" requiredMessage="Informe o Login."
+						validatorMessage="Login deve ter no mínimo 5 e no máximo 15 caracteres e só pode ter os símbolos '.' e '_'.">
+						<f:validateRegex pattern="([a-z]|[0-9]|[.]|[_]){5,15}" />
+					</p:inputText>
+
+					<h:outputLabel value="Senha" for="senha" />
+					<p:password id="senha" label="Senha" redisplay="true"
+						value="#{usuarioBean.usuario.senha}" size="20" maxlength="20"
+						required="true" requiredMessage="Informe a senha" feedback="true" />
+
+					<h:outputLabel value="Confirma Senha" for="confirmaSenha" />
+					<p:password id="confirmaSenha" label="Confirma Senha" redisplay="true" size="20"
+						maxlength="20" value="#{usuarioBean.confirmaSenha}"
+						required="true" requiredMessage="Confirme a senha." />
+
+				</p:panelGrid>
+			</p:panel>
+			<br />
+			<p:commandButton id="btn-salvar" action="#{usuarioBean.salvar}" value="Salvar" update="cadastroUsuario" />
+			
+			<!-- Barra de espera -->
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage library="imagens"  name="ajaxloadingbar.gif" />
+			</p:dialog>
+			<!-- <p:blockUI block="cadastroUsuario" trigger="btn-salvar"></p:blockUI> -->
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

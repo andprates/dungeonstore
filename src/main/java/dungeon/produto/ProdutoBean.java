@@ -28,7 +28,7 @@ public class ProdutoBean implements Serializable {
 	public String novo(){
 		this.produto = new Produto();
 		this.cronograma = new ProdutoCronograma();
-		return "cadastroProduto";
+		return "/restrito/cadastroProduto";
 	}
 	
 	public void salvar(){

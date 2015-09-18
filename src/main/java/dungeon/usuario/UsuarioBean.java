@@ -1,17 +1,22 @@
 package dungeon.usuario;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import dungeon.util.Mensagem;
 
-@ManagedBean(name="usuarioBean")
-@RequestScoped
+@Controller("usuarioBean")
+@Scope("request")
 public class UsuarioBean {
 	
 	private Usuario usuario = new Usuario();
-	private UsuarioRN usuarioRN = new UsuarioRN();
+	@Autowired
+	private UsuarioRN usuarioRN;
 	private String confirmaSenha;
+	private List<Usuario> listaUsuarios;
 	
 	
 	public String novo(){
@@ -27,9 +32,28 @@ public class UsuarioBean {
 		}
 		this.usuario.setAtivo(true);
 		this.usuarioRN.salvar(this.usuario);
+		Mensagem.mensagemInformacao("Cadastro efetuado com sucesso!");
 		this.usuario = new Usuario();
 		
-		return "usuario";
+		return "/admin/usuario_lista";
+	}
+	
+	public String editar (Usuario user){
+		this.confirmaSenha = user.getSenha();
+		this.usuario = user;
+		return "/admin/usuario";
+	}
+	
+	public String excluir(Usuario user){
+		this.usuarioRN.excluir(user);
+		this.listaUsuarios = null;
+		return null;
+	}
+	
+	public String ativar(){
+		this.usuario.setAtivo(this.usuario.isAtivo()? false : true);
+		this.usuarioRN.salvar(this.usuario);
+		return null;
 	}
 
 	public Usuario getUsuario() {
@@ -47,8 +71,20 @@ public class UsuarioBean {
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
 	}
+
+	public List<Usuario> getListaUsuarios() {
+		if (this.listaUsuarios == null) {
+			this.listaUsuarios = this.usuarioRN.listarTodos();
+		}
+		return this.listaUsuarios;
+	}
+
+	public void setListaUsuarios(List<Usuario> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
+	}
 	
 
+	
 	
 	
 

@@ -1,46 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<b:beans xmlns="http://www.springframework.org/schema/security"
-    xmlns:b="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
-	<http>
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:sec="http://www.springframework.org/schema/security"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.0.xsd
+    http://www.springframework.org/schema/jee
+    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+	<sec:http>
 
-		<intercept-url pattern="/admin/**" access="ROLE_ADMINISTRADOR" />
-		<intercept-url pattern="/restrito/**" access="ROLE_USER" />
-		<form-login login-page="/publico/login.jsf"
+		<sec:intercept-url pattern="/admin/**" access="ROLE_ADMINISTRADOR" />
+		<sec:intercept-url pattern="/restrito/**" access="ROLE_USUARIO" />
+		<sec:form-login login-page="/publico/login.jsf"
 			always-use-default-target="true" default-target-url="/restrito/principal.jsf"
 			authentication-failure-url="/publico/login.jsf?login_error=1" />
-		<logout/>
-		<remember-me />
-	</http>
+		<sec:logout/>
+		<sec:remember-me />
+	</sec:http>
 
-	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="admin" password="123456" authorities="ROLE_USER"/>
-			</user-service>
-			<!-- <jdbc-user-service data-source-ref="dataSource"
+	<sec:authentication-manager>
+		<sec:authentication-provider>
+			<!-- <user-service>
+				<user name="admin" password="123456" authorities="ROLE_USUARIO,ROLE_ADMINISTRADOR"/>
+			</user-service> -->
+			<sec:jdbc-user-service data-source-ref="dataSource"
 				authorities-by-username-query="SELECT u.login, p.permissao 
-											 FROM usuario u, usuario_permissao p 
-											WHERE u.codigo = p.usuario 
+											 FROM Usuario u, usuario_permissao p 
+											WHERE u.id = p.usuario 
 											  AND u.login = ?"
 				users-by-username-query="SELECT login, senha, ativo 
-									   FROM usuario 
-									  WHERE login = ?" /> -->
-		</authentication-provider>
-	</authentication-manager>
+									   FROM Usuario 
+									  WHERE login = ?" />
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceXmlLocation" value="classpath:/META-INF/persistence.xml" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.connection.characterEncoding">utf8</prop>
+				<prop key="hibernate.connection.charSet">utf8"</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans"> true </prop>
+			</props>
+		</property>
+	</bean>
 
-	<!-- <b:bean id="dataSource"	
+	<!-- DATASOURCE OPENSHIFT -->
+	<!-- <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/MySQLDS" /> -->
+	
+	<!-- DATASOURCE LOCAL -->
+	<bean id="dataSource"	
 			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/dungeon" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="username" value="root" />
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 
-		<b:property name="url"
-			value="jdbc:mysql://localhost:3306/dungeon" />
+	<task:annotation-driven/>
+	
+	<context:annotation-config />
+	
+	<context:component-scan base-package="dungeon"/>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-		<b:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-
-		<b:property name="username" value="root" />
-
-	</b:bean> -->
-
-</b:beans>
+</beans>

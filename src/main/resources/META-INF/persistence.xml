@@ -4,13 +4,13 @@
      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
 
-	<persistence-unit name="dungeon" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="dungeon">
+	<!-- <persistence-unit name="dungeon" transaction-type="JTA"> -->
 
 		<!-- provedor/implementacao do JPA -->
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<!-- <jta-data-source>java:comp/env/jdbc/MySQLDS</jta-data-source> -->
 
-		<class>dungeon.usuario.Usuario</class>
 	
 		<properties>
 			<!-- dados da conexao -->

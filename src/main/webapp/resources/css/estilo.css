@@ -4,7 +4,7 @@ body, td, th {
 }
 
 body{
-	background-image: url("#{facesContext.externalContext.requestContextPath}/resources/images/fundo_site3.jpg");
+	background-image: url("#{facesContext.externalContext.requestContextPath}/resources/imagens/fundo_site3.jpg");
 }
 
 img {

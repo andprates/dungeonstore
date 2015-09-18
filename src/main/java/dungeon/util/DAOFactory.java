@@ -9,10 +9,6 @@ import dungeon.usuario.UsuarioDAOHibernate;
 
 public class DAOFactory {
 	
-	public static UsuarioDAO criarUsuarioDAO(){
-		return new UsuarioDAOHibernate(JPAUtil.getEntityManager());
-	}
-	
 	public static ProdutoDAO criarProdutoDAO(){
 		return new ProdutoDAOHibernate(JPAUtil.getEntityManager());
 	}

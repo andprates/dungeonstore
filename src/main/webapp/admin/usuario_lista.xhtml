@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/template_interno.xhtml">
+	<ui:define name="corpo">
+		<h:form id="lista_usuarios">
+			
+			<p:commandButton value="Novo Usuário" action="#{usuarioBean.novo()}" />
+			<br />
+			<br />
+			
+			<p:growl id="messages" autoUpdate="true" />
+			<p:panel header="Usuários Cadastrados" style="width:60%">
+				<p:dataTable value="#{usuarioBean.listaUsuarios}" var="usuario" paginator="true"
+					rows="10">
+					
+					<p:column style="width:5%;text-align:center">
+						<p:commandLink action="#{usuarioBean.ativar()}" 
+							title="Status Ativação" update="lista_usuarios">
+							<h:graphicImage library="imagens"
+								name="usuario_ativo_#{usuario.ativo}.png" />
+							<f:setPropertyActionListener value="#{usuario}"
+								target="#{usuarioBean.usuario}" />
+						</p:commandLink>
+					</p:column>
+					
+					<p:column headerText="ID" style="width:5%;text-align:center">
+						#{usuario.id}
+					</p:column>
+					
+					<p:column headerText="Nome" style="width:32%;" sortBy="#{usuario.nome}">
+						#{usuario.nome}"
+					</p:column>
+					
+					<p:column headerText="e-Mail" style="width:32%;"> 
+						#{usuario.email}
+					</p:column>
+					
+					<p:column headerText="Login" style="width:15%;">
+						#{usuario.login}
+					</p:column>
+					
+					<p:column style="width:10%; text-align:center;">
+						<p:commandLink action="#{usuarioBean.editar(usuario)}" title="Editar" >
+							<h:graphicImage library="imagens" name="editar.png" />
+						</p:commandLink>
+						<p:commandLink action="#{usuarioBean.excluir(usuario)}" update="lista_usuarios" >
+							<p:confirm header="Confirmação" message="Confirma a exclusão do usuário #{usuario.nome}?" 
+								icon="ui-icon-alert"/>
+							<h:graphicImage library="imagens" name="excluir.png" />
+						</p:commandLink>
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>
+</html>

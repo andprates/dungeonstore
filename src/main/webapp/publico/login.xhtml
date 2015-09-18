@@ -17,9 +17,9 @@
 		<br />
 		<br />
 
+		<p:focus/>
 		<form id="login" method="post" action="#{request.contextPath}/j_spring_security_check">
 			<h:panelGrid columns="2" >
-				<p:focus/>
 				
 				<h:outputLabel for="j_username" value="Usuário" />
 				<p:inputText id="j_username" required="true" />
@@ -27,8 +27,8 @@
 				<h:outputLabel for="j_password" value="Senha" />
 				<p:password id="j_password" required="true" />
 				
-				<p:selectBooleanCheckbox value="_spring_security_remember_me"  />
-				<h:outputLabel value="Entrar automaticamente" />
+				<!-- <p:selectBooleanCheckbox value="_spring_security_remember_me"  />
+				<h:outputLabel value="Entrar automaticamente" /> -->
 
 				<input type="submit" value="Entrar" />
 			</h:panelGrid>
