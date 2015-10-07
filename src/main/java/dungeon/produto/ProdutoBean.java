@@ -8,19 +8,24 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import dungeon.produto.entity.Produto;
 import dungeon.produto.entity.ProdutoCronograma;
 import dungeon.produto.entity.TipoRoupa;
 
-@ManagedBean
-@RequestScoped
+@Controller("produtoBean")
+@Scope("request")
 public class ProdutoBean implements Serializable {
 	
 	private static final long serialVersionUID = 6759920929897774824L;
 
 	Produto produto = new Produto();
 	ProdutoCronograma cronograma = new ProdutoCronograma();
-	ProdutoRN produtoRN = new ProdutoRN();
+	@Autowired
+	ProdutoRN produtoRN;
 	Double estimativaVenda = 0.0;
 	boolean mostrarRoupa;
 	List<TipoRoupa> tipoRoupas;

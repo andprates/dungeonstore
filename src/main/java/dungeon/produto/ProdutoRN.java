@@ -1,22 +1,22 @@
 package dungeon.produto;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dungeon.produto.dao.ProdutoCronogramaDAO;
 import dungeon.produto.dao.ProdutoDAO;
 import dungeon.produto.entity.Produto;
 import dungeon.produto.entity.ProdutoCronograma;
-import dungeon.util.DAOFactory;
 import dungeon.util.Mensagem;
 
+@Service
 public class ProdutoRN {
 	
+	@Autowired
 	private ProdutoDAO produtoDAO;
+	@Autowired
 	private ProdutoCronogramaDAO produtoCronogramaDAO;
 
-	public ProdutoRN() {
-		this.produtoDAO = DAOFactory.criarProdutoDAO();
-		this.produtoCronogramaDAO = DAOFactory.criarProdutoCronogramaDAO();
-	}
-	
 	public void salvar(Produto produto, ProdutoCronograma cronograma){
 			
 			produto = salvarProduto(produto);
